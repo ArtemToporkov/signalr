@@ -44,6 +44,7 @@ namespace BadNews
             });
             services.AddMemoryCache();
             services.AddSignalR();
+            services.AddServerSideBlazor();
             var mvcBuilder = services.AddControllersWithViews();
             if (env.IsDevelopment())
                 mvcBuilder.AddRazorRuntimeCompilation();
@@ -85,6 +86,7 @@ namespace BadNews
                 });
                 endpoints.MapControllerRoute("default", "{controller=News}/{action=Index}/{id?}");
                 endpoints.MapHub<CommentsHub>("/commentsHub");
+                endpoints.MapBlazorHub();
             });
             app.MapWhen(context => context.Request.IsElevated(), branchApp =>
             {
