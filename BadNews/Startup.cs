@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using BadNews.Hubs;
 using BadNews.Repositories.Comments;
 
 namespace BadNews
@@ -42,6 +43,7 @@ namespace BadNews
                 options.EnableForHttps = true;
             });
             services.AddMemoryCache();
+            services.AddSignalR();
             var mvcBuilder = services.AddControllersWithViews();
             if (env.IsDevelopment())
                 mvcBuilder.AddRazorRuntimeCompilation();
@@ -82,6 +84,7 @@ namespace BadNews
                     action = "StatusCode"
                 });
                 endpoints.MapControllerRoute("default", "{controller=News}/{action=Index}/{id?}");
+                endpoints.MapHub<CommentsHub>("/commentsHub");
             });
             app.MapWhen(context => context.Request.IsElevated(), branchApp =>
             {
